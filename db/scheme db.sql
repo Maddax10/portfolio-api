@@ -1,0 +1,8 @@
+CREATE TABLE "users" (
+	"id_users"	INTEGER NOT NULL UNIQUE,
+	"mail_users"	TEXT NOT NULL UNIQUE,
+	"password_users"	TEXT NOT NULL,
+	"createdAt_users"	INTEGER NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	"role_users"	INTEGER NOT NULL DEFAULT 'user',
+	PRIMARY KEY("id_users" AUTOINCREMENT)
+)
