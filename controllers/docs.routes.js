@@ -20,7 +20,8 @@ export const routes = [
   },
 ];
 
-router.get('/docs', (_req, res) => {
+//A la racine de "/doc"
+router.get('/', (_req, res) => {
   return res.status(200).json(routes);
 });
 

@@ -7,7 +7,23 @@ import requireAuth from '../middleware/auth.js';
 import { isAdmin } from '../middleware/rbac.js';
 const router = Router();
 
+/**
+ * Check if the user is in the bdd
+ * @param {*} mail_users
+ * @returns user json from DB
+ */
+const CheckUser = (mail_users) => {
+  const userDB = db.prepare('select * from users where mail_users = ?').get(mail_users);
+  return userDB || null;
+};
+
+const CheckPassword = (password, userDB) => {
+  //compareSync compare un mdp non hashé à un mdp hashé
+  return bcrypt.compareSync(password, userDB.password_users);
+};
+
 /** GET  ============================================================ */
+
 /** POST ============================================================ */
 
 /**
@@ -21,19 +37,36 @@ const router = Router();
 router.post('/login', (req, res) => {
   const { mail_users, password_users } = req.body || {};
   //Si erreur dans les paramètres, indication claire
-  if (!mail_users || !password_users) return res.status(400).json({ error: 'params incorrects', body: { mail_users: 'mail', password_users: 'password' } });
+  if (!mail_users || !password_users) return res.status(400).json({ error: 'params incorrects', body: { mail_users: 'required', password_users: 'required' } });
 
   try {
-    //1) recherche de l'utilisateur pour voir s'il est trouvé
-    const row = db.prepare('select * from users where mail_users = ?').get(mail_users);
-    if (!row) return res.status(401).json({ error: 'mail not found' });
+    //1) recherche et affectation de l'utilisateur pour voir s'il est trouvé
+    const userDB = CheckUser(mail_users);
+    if (!userDB) {
+      console.warn(`[/users/login] mail inconnu`, mail_users);
+      return res.status(401).json({ error: 'Identifiants invalides' });
+    }
 
-    //check if the pass in params is the same as in bd
-    let checkPass = row.password_users === password_users;
+    //2) si l'utilisateur à été trouvé, alors on compare le mdp
+    //on check si le password (non hashé) est le même que celui en bdd (hashé)
+    const isOk = CheckPassword(password_users, userDB);
+    if (!isOk) {
+      console.warn(`[/users/login] password inconnu pour email `, userDB.mail_users);
+      return res.status(401).json({ error: 'Identifiants invalides' });
+    }
 
-    if (!checkPass) return res.status(401).json({ error: 'Bad password' });
+    //Création du token
+    const token = jwt.sign({ sub: userDB.id_users, mail: userDB.mail_users }, JWT_SECRET, { expiresIn: '2h' });
 
-    return res.json(row);
+    //Création d'un user pour éviter de renvoyer le mot de passe
+    const user = {
+      id: userDB.id_users,
+      mail: userDB.mail_users,
+      createdAt: userDB.createdAt_users,
+      role: userDB.role_users,
+      token,
+    };
+    return res.json(user);
   } catch (e) {
     return res.status(500).json({ error: e.message });
   }
