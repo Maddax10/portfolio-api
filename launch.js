@@ -11,7 +11,8 @@ import { PORT, URL_API } from './config/config.js';
 
 //Routes
 import docsRoutes, { routes as documentedRoutes } from './controllers/docs.routes.js';
-import authRoutes from './controllers/users.routes.js';
+import usersRoutes from './controllers/users.routes.js';
+import skillsRoutes from './controllers/skills.routes.js';
 
 const app = express();
 // Response compression (gzip) for faster GeoJSON / JSON transfer
@@ -40,7 +41,8 @@ app.get('/health', (_req, res) => res.json({ ok: true, ...BUILD_INFO }));
 //Documentation de l'API
 app.use('/docs/', docsRoutes);
 //
-app.use('/auth/', authRoutes);
+app.use('/auth/', usersRoutes);
+app.use('/skills/', skillsRoutes);
 
 // Root: show API documentation summary instead of login form (frontend not served here)
 app.get('/', (_req, res) => {
