@@ -1,3 +1,5 @@
+DROP TABLE IF EXISTS "users";
+
 CREATE TABLE "users" (
 	"id_users"	INTEGER NOT NULL UNIQUE,
 	"mail_users"	TEXT NOT NULL UNIQUE,

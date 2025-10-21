@@ -1,0 +1,7 @@
+DROP TABLE IF EXISTS "roles";
+
+CREATE TABLE "roles" (
+	"id_roles"	INTEGER NOT NULL UNIQUE,
+	"role_roles"	TEXT NOT NULL UNIQUE,
+	PRIMARY KEY("id_roles" AUTOINCREMENT)
+)
