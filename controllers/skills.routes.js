@@ -6,9 +6,8 @@ const router = Router();
 
 router.get('/all', (req, res) => {
   try {
-    const rows = db.prepare(`SELECT * from skills`).all();
+    const rows = db.prepare(`SELECT * from skills_view`).all();
 
-    const img = getImgFromBin(rows.image);
     res.json(rows);
   } catch (err) {
     return res.status(500).json({ error: err.message });
