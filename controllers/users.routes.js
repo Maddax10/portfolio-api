@@ -57,11 +57,11 @@ router.post('/login', (req, res) => {
     }
 
     //3)On vérifie que c'est un admin
-    if (isAdmin(userDB.id)) {
-      console.warn(`❌ id: ${userDB.id} | is not an admin'`);
-      return;
+    if (isAdmin(userDB)) {
+      console.warn(`✅ id: ${userDB.id} | is an admin'`);
     } else {
-      console.warn(`✅ id: ${userDB.id} | is an admin `);
+      console.warn(`❌ id: ${userDB.id} | is not an admin `);
+      return res.status(500).json({ error: 'not an admin' });
     }
 
     //Création du token
