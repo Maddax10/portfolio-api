@@ -14,8 +14,8 @@ export const routes = [
     method: 'POST',
     path: '/login',
     jsonObject: {
-      email_users: 'mail',
-      password_users: 'password',
+      email: 'mail',
+      password: 'password',
     },
   },
 ];
