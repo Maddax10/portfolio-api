@@ -31,9 +31,10 @@ const CheckPassword = (password, passwordDB) => {
  * Login
  *
  * Objet attendu :
- * {    "mail_user" : "email@mail.com",
- *      "password_user" : "password"
- * }
+    {
+      email: 'mail',
+      password: 'password',
+    },
  */
 router.post('/login', (req, res) => {
   const { mail_users, password_users } = req.body || {};
