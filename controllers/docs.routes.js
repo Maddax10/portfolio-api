@@ -4,12 +4,12 @@ const router = Router();
 
 export const routes = [
 	// health
-	{ ________________________________: 'health' },
+	{ ________________: 'health' },
 	{ method: 'GET', path: '/health' },
 
 	// auth & users
 	// users (admin-only list)
-	{ ________________________________: 'Auth & users' },
+	{ ________________: 'Auth & users' },
 	{
 		method: 'POST',
 		path: '/login',
@@ -19,13 +19,13 @@ export const routes = [
 		},
 	},
 	// Projects
-	{ ________________________________: 'Projects' },
+	{ ________________: 'Projects' },
 	{
 		method: 'GET',
 		path: '/projects/all',
 	},
 	// Skills
-	{ ________________________________: 'Skills' },
+	{ ________________: 'Skills' },
 	{
 		method: 'GET',
 		path: '/skills/all',
