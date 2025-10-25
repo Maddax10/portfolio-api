@@ -10,7 +10,7 @@ import compression from 'compression';
 import { PORT, URL_FRONT, URL_API } from './config/config.js';
 
 //Routes
-import docsRoutes, { routes as documentedRoutes } from './controllers/docs.routes.js';
+import docsRoutes from './controllers/docs.routes.js';
 import usersRoutes from './controllers/users.routes.js';
 import skillsRoutes from './controllers/skills.routes.js';
 import projectsRoutes from './controllers/projects.routes.js';
@@ -47,9 +47,6 @@ app.use('/api/skills/', skillsRoutes);
 app.use('/api/projects/', projectsRoutes);
 
 // Root: show API documentation summary instead of login form (frontend not served here)
-app.get('/', (_req, res) => {
-	res.status(200).json({ name: 'Portfolio API', routes: documentedRoutes });
-});
 
 app.listen(PORT, () => {
 	console.log(`Server running at ${URL_API}:${PORT}`);
