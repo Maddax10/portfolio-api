@@ -28,8 +28,8 @@ export const JWT_SECRET = process.env.JWT_SECRET || base_jwt_secret;
 // Nombre de rounds pour bcrypt (par défaut: 10)
 export const BCRYPT_SALT_ROUNDS = toNumber(process.env.BCRYPT_SALT_ROUNDS, 10);
 
-//Url de l'API
-export const URL_FRONT = process.env.URL_API || 'localhost';
+export const URL_FRONT = process.env.URL_FRONT || 'localhost';
+export const URL_API = process.env.URL_API || 'localhost';
 
 // En environnement non-développement, échoue immédiatement si le JWT_SECRET est resté sur la valeur par défaut (insecure)
 // Vérifie que le secret faible n'est pas utilisé hors développement

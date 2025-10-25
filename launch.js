@@ -7,7 +7,7 @@ import cors from 'cors';
 import compression from 'compression';
 
 // config
-import { PORT, URL_FRONT } from './config/config.js';
+import { PORT, URL_FRONT, URL_API } from './config/config.js';
 
 //Routes
 import docsRoutes, { routes as documentedRoutes } from './controllers/docs.routes.js';
@@ -25,7 +25,7 @@ const BUILD_INFO = { started_at: START_TIME };
 app.use(express.json());
 app.use(
 	cors({
-		origin: '*', //Ou mettre URL_FRONT(de .env) pour être sur que ça ne vient que du front
+		origin: URL_FRONT, //Ou mettre URL_FRONT(de .env) pour être sur que ça ne vient que du front
 		credentials: true,
 		methods: ['GET', 'POST', 'PUT', 'DELETE'],
 		allowedHeaders: ['Content-Type', 'Authorization'],
@@ -38,13 +38,13 @@ app.use(
  *
  */
 // Health (unique)
-app.get('/health', (_req, res) => res.json({ ok: true, ...BUILD_INFO }));
+app.get('/api/health', (_req, res) => res.json({ ok: true, ...BUILD_INFO }));
 //Documentation de l'API
-app.use('/docs/', docsRoutes);
+app.use('/api/docs/', docsRoutes);
 //
-app.use('/auth/', usersRoutes);
-app.use('/skills/', skillsRoutes);
-app.use('/projects/', projectsRoutes);
+app.use('/api/auth/', usersRoutes);
+app.use('/api/skills/', skillsRoutes);
+app.use('/api/projects/', projectsRoutes);
 
 // Root: show API documentation summary instead of login form (frontend not served here)
 app.get('/', (_req, res) => {
