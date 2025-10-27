@@ -25,7 +25,7 @@ const BUILD_INFO = { started_at: START_TIME };
 app.use(express.json());
 app.use(
 	cors({
-		origin: URL_FRONT, //Ou mettre URL_FRONT(de .env) pour être sur que ça ne vient que du front
+		origin: '*', //Ou mettre URL_FRONT(de .env) pour être sur que ça ne vient que du front
 		credentials: true,
 		methods: ['GET', 'POST', 'PUT', 'DELETE'],
 		allowedHeaders: ['Content-Type', 'Authorization'],
@@ -49,5 +49,5 @@ app.use('/api/projects/', projectsRoutes);
 // Root: show API documentation summary instead of login form (frontend not served here)
 
 app.listen(PORT, () => {
-	console.log(`Server running at ${URL_API}:${PORT}`);
+	console.log(`Server running at ${URL_API}`);
 });
