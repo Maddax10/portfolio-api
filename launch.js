@@ -42,7 +42,7 @@ app.get('/api/health', (_req, res) => res.json({ ok: true, ...BUILD_INFO }));
 //Documentation de l'API
 app.use('/api/docs/', docsRoutes);
 //
-app.use('/api/auth/', usersRoutes);
+app.use('/api/users/', usersRoutes);
 app.use('/api/skills/', skillsRoutes);
 app.use('/api/projects/', projectsRoutes);
 

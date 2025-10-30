@@ -72,8 +72,8 @@ router.post('/login', (req, res) => {
 		//on check si le password (non hashé) est le même que celui en bdd (hashé)
 		CheckPassword(password, userDB);
 
-		//3)On vérifie que c'est un admin
-		CheckIsAdmin(userDB);
+		// //3)On vérifie que c'est un admin
+		// CheckIsAdmin(userDB);
 
 		//Création du token
 		const token = jwt.sign({ sub: userDB.id, mail: userDB.mail }, JWT_SECRET, { expiresIn: '2h' });
@@ -90,6 +90,18 @@ router.post('/login', (req, res) => {
 	} catch (e) {
 		if (e.message === badCredentials) return res.status(401).json({ error: e.message });
 		if (e.message === notAdmin) return res.status(403).json({ error: e.message });
+		return res.status(500).json({ error: e.message });
+	}
+});
+
+router.get('/me', requireAuth, (req, res) => {
+	const currentUserId = req.auth?.sub;
+	try {
+		const userDB = db.prepare('select * from users_view where id = ?').get(currentUserId);
+		console.log(userDB);
+
+		return res.status(200).json(userDB);
+	} catch (error) {
 		return res.status(500).json({ error: e.message });
 	}
 });
