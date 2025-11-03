@@ -251,6 +251,7 @@ router.put('/update', requireAuthAdmin, (req, res) => {
     const project = getData(rows);
     const projectSkillObject = getJsonObjectSkills(project);
 
+    console.warn('Modification du projet : ', projectSkillObject);
     return res.status(200).json(projectSkillObject);
   } catch (e) {
     if (e.code === uniqueConstraint) return res.status(401).json({ erreur: uniqueConstraint });
