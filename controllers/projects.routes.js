@@ -123,7 +123,7 @@ router.get('/all', (req, res) => {
       skills: project.skills.map((skill) => byId.get(skill.id)),
     }));
 
-    res.json(enrichedProjects);
+    return res.status(200).json(enrichedProjects);
   } catch (err) {
     return res.status(500).json({ error: err.message });
   }
