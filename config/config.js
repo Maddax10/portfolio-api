@@ -9,8 +9,8 @@ dotenv.config();
 // NOTE: toNumber doit être disponible (utilitaire externe) pour convertir des chaînes en nombres avec valeur par défaut
 // Minimal helper
 const toNumber = (v, fallback) => {
-  const n = Number(v);
-  return Number.isFinite(n) ? n : fallback;
+	const n = Number(v);
+	return Number.isFinite(n) ? n : fallback;
 };
 
 // Définit l'environnement d'exécution (par défaut: 'development')
@@ -28,12 +28,12 @@ export const JWT_SECRET = process.env.JWT_SECRET || base_jwt_secret;
 // Nombre de rounds pour bcrypt (par défaut: 10)
 export const BCRYPT_SALT_ROUNDS = toNumber(process.env.BCRYPT_SALT_ROUNDS, 10);
 
-//Url de l'API
+export const URL_FRONT = process.env.URL_FRONT || 'localhost';
 export const URL_API = process.env.URL_API || 'localhost';
 
 // En environnement non-développement, échoue immédiatement si le JWT_SECRET est resté sur la valeur par défaut (insecure)
 // Vérifie que le secret faible n'est pas utilisé hors développement
 if (NODE_ENV !== 'development' && JWT_SECRET === base_jwt_secret) {
-  // Lève une erreur pour forcer une configuration sécurisée
-  throw new Error('Insecure JWT_SECRET. Set a strong JWT_SECRET in the environment.');
+	// Lève une erreur pour forcer une configuration sécurisée
+	throw new Error('Insecure JWT_SECRET. Set a strong JWT_SECRET in the environment.');
 }

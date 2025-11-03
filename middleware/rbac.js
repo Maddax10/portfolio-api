@@ -1,6 +1,10 @@
 import db from '../db/database.js';
 
-export const isAdmin = (userDB) => {
-  if (!userDB) return false;
-  return userDB?.role === 'Admin';
+const admin = `Admin`;
+
+export const isAdmin = (mail) => {
+  const roleDB = db.prepare(`select role from users_view where mail = ?`).get(mail);
+  return roleDB.role === admin;
 };
+
+export default isAdmin;

@@ -1,69 +1,56 @@
-# **<u>🚀 API Portfolio</u>**
+# ****🚀 API Portfolio****
 
-API Node.js/Express avec SQLite pour exposer des projets et des compétences, avec login administrateur.
+API simple pour exposer des projets et des compétences, avec authentification admin, basée sur Node.js, Express et SQLite.
 
 ---
 
-## **<u>🧰 Stack</u>**
+## ****🧰 Stack technique****
 
 - Node.js + Express
 - SQLite (better-sqlite3)
-- JWT (auth)
-- CORS, compression gzip
-- Variables d’environnement (.env)
+- Authentification JWT
+- CORS + compression gzip
 
 ---
 
-## **<u>📂 Arborescence</u>**
-
-- /controllers  
-   Routes Express (auth, projets, compétences)
-- /db  
-   Connexion et scripts SQL (tables, vues)
-- /middleware  
-   Authentification JWT et RBAC
-- /config  
-   Chargement .env et constantes
-- launch.js  
-   Entrée du serveur
-
----
-
-## **<u>✅ Prérequis</u>**
+## ****✅ Prérequis****
 
 - Node.js LTS (≥ 18)
 - npm
-- Windows (OK), macOS/Linux (OK)
+- Windows, macOS ou Linux
 
 ---
 
-## **<u>⚙️ Installation</u>**
+## ****⚙️ Installation****
 
-- Cloner le repo
-- Installer les dépendances
-  - `npm install`
-- Créer un fichier .env (ou copier celui d’exemple)
+- Cloner le projet
+- Installer les dépendances  
+   `npm install`
 
-Exemple minimal de .env:
+---
+
+## ****🗝️ Configuration (.env)****
+
+- Créer un fichier `.env` à la racine (ou copier celui d’exemple)
 
 ```env
 NODE_ENV=development
 PORT=3000
 DB_PATH=db/bdd.db
-JWT_SECRET=change-moi
+DB_VERBOSE=false
+JWT_SECRET=change-moi-en-production
 BCRYPT_SALT_ROUNDS=10
-URL_API=localhost
+URL_FRONT=localhost
 ```
 
 ---
 
-## **<u>▶️ Lancement</u>**
+## ****▶️ Démarrage****
 
-- Démarrer le serveur
-  - `node launch.js`
-- Par défaut: http://localhost:3000
+- Lancer le serveur  
+   `node launch.js`
 
-Astuce (optionnel): ajoutez un script npm “start”:
+- Optionnel (ajouter dans package.json)
 
 ```json
 {
@@ -73,101 +60,118 @@ Astuce (optionnel): ajoutez un script npm “start”:
 }
 ```
 
+- Puis lancer  
+   `npm start`
+
 ---
 
-## **<u>🔌 Endpoints</u>**
+## ****📂 Structure du projet****
+
+- /controllers  
+   Routes Express (docs, users/auth, skills, projects)
+- /db  
+   Connexion + scripts SQL (tables, vues)
+- /middleware  
+   Auth JWT et rôles
+- /config  
+   Chargement variables d’env
+- launch.js  
+   Entrée du serveur
+
+---
+
+## ****🗄️ Base de données****
+
+- Fichier SQLite: défini par `DB_PATH` (ex: `db/bdd.db`)
+- Tables: `users`, `roles`, `skills`, `projects`
+- Vues:
+  - `login_view` (auth)
+  - `skills_view`
+  - `projects_view` (inclut `skills` en JSON texte)
+- Remarque: `projects.skills` est stocké en texte JSON en BDD et renvoyé en tableau par l’API.
+
+---
+
+## ****🔌 Endpoints principaux****
 
 - Healthcheck
 
   - `GET /health`
-  - Réponse: `{ ok: true, started_at: ... }`
+  - Réponse: `{ ok: true, started_at: "..." }`
+
+- Documentation (JSON)
+
+  - `GET /docs/`
 
 - Authentification
 
   - `POST /auth/login`
-  - Body: `{ "mail_users": "mail", "password_users": "password" }`
-  - Réponse: `{ id, mail, role, token, ... }`
-  - Le token JWT (Bearer) sert pour les routes protégées.
+  - Body:
+    ```json
+    { "mail_users": "admin@mail.com", "password_users": "votre-mot-de-passe" }
+    ```
+  - Réponse: objet utilisateur + `token` (JWT)
+  - Utilisation du token sur routes protégées:  
+     `Authorization: Bearer <token>`
 
 - Compétences
 
   - `GET /skills/all`
-  - Réponse: liste des compétences (id, name, image_path)
+  - Réponse: tableau d’objets `{ id, name, image_path }`
 
 - Projets
   - `GET /projects/all`
-  - Réponse: liste des projets (id, title, description, github, image_path, skills)
-  - Le champ `skills` est renvoyé comme tableau JSON (pas une chaîne)
-
-Exemples rapides (PowerShell ou Git Bash):
-
-```bash
-curl http://localhost:3000/health
-curl -X POST http://localhost:3000/auth/login -H "Content-Type: application/json" -d "{\"mail_users\":\"admin@mail.com\",\"password_users\":\"password\"}"
-curl http://localhost:3000/skills/all
-curl http://localhost:3000/projects/all
-```
+  - Réponse: tableau d’objets `{ id, title, description, github, image_path, skills }`
+  - `skills` est un tableau (parsé depuis le JSON stocké en BDD)
 
 ---
 
-## **<u>🔐 Authentification (JWT)</u>**
+## ****🧪 Exemples rapides (curl)****
 
-- Après login, utilisez le token dans l’entête:
-  - `Authorization: Bearer <token>`
-- Les routes protégées utilisent le middleware d’auth: refus si token manquant ou expiré.
+- Health  
+   `curl http://localhost:3000/health`
 
----
+- Login (retourne un token)  
+   `curl -X POST http://localhost:3000/auth/login -H "Content-Type: application/json" -d "{\"mail_users\":\"admin@mail.com\",\"password_users\":\"password\"}"`
 
-## **<u>🗄️ Données & Base SQLite</u>**
+- Skills  
+   `curl http://localhost:3000/skills/all`
 
-- Tables: users, roles, skills, projects
-- Vues: login_view, skills_view, projects_view
-- Emplacement DB: `DB_PATH` (ex: db/bdd.db)
-
-Conseils:
-
-- Sauvegardez le fichier .db (backup)
-- Ne mettez pas le .db en public
-- Ne modifiez pas directement les vues: mettez à jour les tables sources
+- Projects  
+   `curl http://localhost:3000/projects/all`
 
 ---
 
-## **<u>🖼️ Images: quoi stocker ?</u>**
+## ****🔐 Sécurité****
 
-- Simple et efficace: stocker un chemin/URL vers l’image (ex: `/images/portfolio.png`)
-- Avantages: cache navigateur/CDN, BDD légère, pas de base64
-- Alternative: BLOB en BDD si besoin d’atomicité ou de petites images
-
----
-
-## **<u>🌐 CORS & Réseau</u>**
-
-- CORS activé pour tous les domaines (`origin: *`)
-- Adaptez-le en production (limiter au domaine du front)
+- Utiliser un `JWT_SECRET` fort en production
+- Restreindre CORS à votre domaine front en prod
+- Ne pas exposer le fichier `.db`
+- Sauvegarder régulièrement la base
 
 ---
 
-## **<u>🧪 Tests rapides</u>**
+## ****🖼️ Gestion des images****
 
-- Vérifier que `GET /health` répond
-- Vérifier `POST /auth/login` renvoie un token
-- Vérifier `GET /skills/all` et `GET /projects/all` renvoient bien du JSON
-
----
-
-## **<u>🛡️ Sécurité (à minima)</u>**
-
-- Utiliser un `JWT_SECRET` fort (env prod)
-- Limiter le CORS à votre front en prod
-- Valider les entrées sur les routes d’écriture (si ajoutées)
-- Mettre à jour les packages régulièrement
+- Recommandé: stocker en BDD un chemin/URL (ex: `/images/portfolio.png`) et servir les fichiers statiquement (ou via CDN)
+- Avantages: BDD légère, cache navigateur/CDN, performance
+- Alternative: stocker l’image en BLOB si besoin spécifique
 
 ---
 
-## **<u>🚀 Déploiement</u>**
+## ****🚀 Déploiement****
 
 - Définir les variables d’environnement (PORT, DB_PATH, JWT_SECRET, …)
-- Exposer le port (reverse proxy: Nginx/Traefik)
-- Surveiller les logs et la taille du .db
+- Utiliser un reverse proxy (Nginx/Traefik)
+- Activer les logs et surveiller la taille du fichier `.db`
 
 ---
+
+## ****🛠️ Dépannage****
+
+- 401 sur routes protégées
+  - Vérifier l’en-tête `Authorization: Bearer <token>`
+- Erreurs BDD
+  - Vérifier `DB_PATH` et la présence des tables/vues
+- `skills` apparaît “avec des backslash” en console
+  - C’est normal en BDD (texte JSON). L’API parse et renvoie un vrai tableau.
