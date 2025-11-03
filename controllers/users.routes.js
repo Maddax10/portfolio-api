@@ -98,7 +98,7 @@ router.get('/me', requireAuth, (req, res) => {
 	const currentUserId = req.auth?.sub;
 	try {
 		const userDB = db.prepare('select * from users_view where id = ?').get(currentUserId);
-		console.log(userDB);
+		// console.log(userDB);
 
 		return res.status(200).json(userDB);
 	} catch (error) {
