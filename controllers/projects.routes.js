@@ -102,6 +102,7 @@ const getData = (project) => {
  *             schema:
  *               type: array
  *               items:
+ *                 type: Object
  *                 $ref: '#/components/schemas/Project'
  */
 router.get('/all', (req, res) => {
@@ -166,12 +167,10 @@ router.get('/all', (req, res) => {
  *                 example: [{"id":1}]
  *     responses:
  *       '200':
- *         description: creation d'un projet
+ *         description: Récupéré le projet créé
  *         content:
  *           application/json:
  *             schema:
- *               type: array
- *               items:
  *                 $ref: '#/components/schemas/Project'
  */
 router.post('/create', requireAuth, (req, res) => {
@@ -233,12 +232,10 @@ router.post('/create', requireAuth, (req, res) => {
  *                 example: [{"id":1}]
  *     responses:
  *       '200':
- *         description: creation d'un projet
+ *         description: Récupérer le projet modifié
  *         content:
  *           application/json:
  *             schema:
- *               type: array
- *               items:
  *                 $ref: '#/components/schemas/Project'
  */
 router.put('/update', requireAuth, (req, res) => {
@@ -283,12 +280,10 @@ router.put('/update', requireAuth, (req, res) => {
  *                 example: 3
  *     responses:
  *       '200':
- *         description: creation d'un projet
+ *         description: Récupérer le projet supprimé
  *         content:
  *           application/json:
  *             schema:
- *               type: array
- *               items:
  *                 $ref: '#/components/schemas/Project'
  */
 router.delete('/delete', requireAuth, (req, res) => {

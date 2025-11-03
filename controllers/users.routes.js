@@ -84,15 +84,15 @@ const CheckIsAdmin = (userDB) => {
  *             properties:
  *               mail:
  *                 type: string
- *                 description: The user's mail.
+ *                 description: Le mail de l'utilisateur.
  *                 example: guest@guest.guest
  *               password:
  *                 type: string
- *                 description: The user's pasword.
+ *                 description: Le mot de passe de l'utilisateur.
  *                 example: password
  *     responses:
  *       '200':
- *         description: informations de l'utilisateur
+ *         description: Récupérer les informations de l'utilisateur
  *         content:
  *           application/json:
  *             schema:
@@ -140,16 +140,17 @@ router.post('/login', (req, res) => {
  * @swagger
  * /users/me:
  *   post:
- *     summary: Récupérer les informations de l'utilisateur
+ *     summary: Informations de l'utilisateur
  *     tags: [Users]
  *     responses:
  *       '200':
- *         description: informations de l'utilisateur
+ *         description: Récupérer les informations de l'utilisateur
  *         content:
  *           application/json:
  *             schema:
  *               type: array
  *               items:
+ *                 type : Object
  *                 $ref: '#/components/schemas/UserMe'
  */
 

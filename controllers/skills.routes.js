@@ -99,6 +99,13 @@ router.get('/all', requireAuth, (req, res) => {
  *                 type: string
  *                 description: Le chemin relatif du logo du skill.
  *                 example: /images/logo_react.jpg
+ *     responses:
+ *       '200':
+ *         description: Récupérer l'objet créé
+ *         content:
+ *           application/json:
+ *             schema:
+ *                 $ref: '#/components/schemas/Skill'
  */
 router.post('/create', requireAuth, (req, res) => {
   const { name, image_path, description } = req.body;
@@ -151,12 +158,10 @@ router.post('/create', requireAuth, (req, res) => {
  *                 example: /images/logo_react_v2.jpg
  *     responses:
  *       '200':
- *         description: get the current updated item
+ *         description: Récupérer l'objet modifié
  *         content:
  *           application/json:
  *             schema:
- *               type: array
- *               items:
  *                 $ref: '#/components/schemas/Skill'
  */
 router.put('/update', requireAuth, (req, res) => {
@@ -192,7 +197,7 @@ router.put('/update', requireAuth, (req, res) => {
  * @swagger
  * /skills/delete:
  *   delete:
- *     summary: delete a skill
+ *     summary: Supprimer un skill
  *     tags: [Skills]
  *     requestBody:
  *       required: true
@@ -207,12 +212,10 @@ router.put('/update', requireAuth, (req, res) => {
  *                 example: 3
  *     responses:
  *       '200':
- *         description: creation d'un projet
+ *         description: Récupérer le skill supprimé
  *         content:
  *           application/json:
  *             schema:
- *               type: array
- *               items:
  *                 $ref: '#/components/schemas/Skill'
  */
 
