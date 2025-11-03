@@ -6,6 +6,9 @@ const router = Router();
 const uniqueConstraint = `SQLITE_CONSTRAINT_UNIQUE`;
 const noDataInBDD = `No data in bdd`;
 
+const allSkills = db.prepare(`select * from skills_view`).all();
+const byId = new Map(allSkills.map((skill) => [skill.id, skill]));
+
 const isValidString = (s) => {
 	return typeof s === 'string' && s.trim().length > 0;
 };
@@ -29,18 +32,28 @@ const isValidIdSkillsArray = (skillsObj) => {
 	skillsObj.map((skill) => (countValidObj += isPlainObject(skill) && typeof skill.id === 'number'));
 	return countValidObj === skillsObj.length;
 };
+
+const getJsonObjectSkills = (project) => {
+	//Prendre l'id et ajouter les informations des skills dans
+	project.skills = JSON.parse(project.skills);
+
+	project.skills = project.skills.map((skill) => byId.get(skill.id));
+
+	return project;
+};
 /**
  * Modifie la structure de l'objet renvoyé pour ne pas matcher avec la bdd
- * @param {*} rows
+ * @param {*} project
  * @returns
  */
-const getData = (rows) => {
+const getData = (project) => {
 	return {
-		title: rows.title_projects,
-		description: rows.description_projects,
-		github: rows.github_projects,
-		image_path: rows.image_path_projects,
-		skills: rows.skills_projects,
+		id: project.id_projects,
+		title: project.title_projects,
+		description: project.description_projects,
+		github: project.github_projects,
+		image_path: project.image_path_projects,
+		skills: project.skills_projects,
 	};
 };
 
@@ -59,10 +72,7 @@ router.get('/all', requireAuth, (req, res) => {
 		}));
 
 		//je récupère tous les skills
-		const allSkills = db.prepare(`select * from skills_view`).all();
 		//je créé un dictionnaire par id de ces skills
-		const byId = new Map(allSkills.map((s) => [s.id, s]));
-
 		//J'enrichie mes projects avec les skills
 		const enrichedProjects = projects.map((project) => ({
 			...project,
@@ -95,9 +105,11 @@ router.post('/create', requireAuth, (req, res) => {
 		if (!isValidString(title) || !isValidString(description) || !isValidString(github) || !isValidString(image_path) || !isValidIdSkillsArray(skills)) throw new Error('champ vide ou mauvais objet envoyé');
 
 		const rows = db.prepare(`INSERT INTO projects (title_projects, description_projects, github_projects, image_path_projects, skills_projects) VALUES (?,?,?,?,?) RETURNING *;`).get(title, description, github, image_path, JSON.stringify(skills));
-		const data = getData(rows);
 
-		return res.status(200).json(data);
+		const project = getData(rows);
+		const projectSkillObject = getJsonObjectSkills(project);
+
+		return res.status(200).json(projectSkillObject);
 	} catch (e) {
 		if (e.code === uniqueConstraint) return res.status(401).json({ erreur: 'Doublons non autorisé' });
 		return res.status(401).json({ erreur: e.message });
@@ -127,8 +139,10 @@ router.put('/update', requireAuth, (req, res) => {
 
 		if (!rows) throw new Error(noDataInBDD);
 
-		const data = getData(rows);
-		return res.status(200).json(data);
+		const project = getData(rows);
+		const projectSkillObject = getJsonObjectSkills(project);
+
+		return res.status(200).json(projectSkillObject);
 	} catch (e) {
 		if (e.code === uniqueConstraint) return res.status(401).json({ erreur: uniqueConstraint });
 		if (e.code === noDataInBDD) return res.status(401).json({ erreur: noDataInBDD });
@@ -157,8 +171,10 @@ router.delete('/delete', requireAuth, (req, res) => {
 
 		if (!rows) throw new Error(noDataInBDD);
 
-		const data = getData(rows);
-		return res.status(200).json({ delete: data });
+		const project = getData(rows);
+		const projectSkillObject = getJsonObjectSkills(project);
+
+		return res.status(200).json({ deleted: projectSkillObject });
 	} catch (e) {
 		if (e.code === uniqueConstraint) return res.status(401).json({ erreur: uniqueConstraint });
 		if (e.code === noDataInBDD) return res.status(401).json({ erreur: noDataInBDD });
