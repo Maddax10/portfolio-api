@@ -25,7 +25,7 @@
 
 import { Router } from 'express';
 import db from '../db/database.js';
-import requireAuth from '../middleware/auth.js';
+import requireAuthAdmin from '../middleware/auth.js';
 
 const router = Router();
 const uniqueConstraint = `SQLITE_CONSTRAINT_UNIQUE`;
@@ -173,7 +173,7 @@ router.get('/all', (req, res) => {
  *             schema:
  *                 $ref: '#/components/schemas/Project'
  */
-router.post('/create', requireAuth, (req, res) => {
+router.post('/create', requireAuthAdmin, (req, res) => {
   const { title, description, github, image_path, skills } = req.body;
   try {
     if (!title || !description || !github || !image_path || !skills) throw new Error('champ vide ou mauvais objet envoyé');
@@ -238,7 +238,7 @@ router.post('/create', requireAuth, (req, res) => {
  *             schema:
  *                 $ref: '#/components/schemas/Project'
  */
-router.put('/update', requireAuth, (req, res) => {
+router.put('/update', requireAuthAdmin, (req, res) => {
   const { id, title, description, github, image_path, skills } = req.body;
   try {
     if (!id || !title || !description || !github || !image_path || !skills) throw new Error('champ vide ou mauvais objet envoyé');
@@ -286,7 +286,7 @@ router.put('/update', requireAuth, (req, res) => {
  *             schema:
  *                 $ref: '#/components/schemas/Project'
  */
-router.delete('/delete', requireAuth, (req, res) => {
+router.delete('/delete', requireAuthAdmin, (req, res) => {
   const { id } = req.body;
   try {
     if (!id) throw new Error('champ vide ou mauvais objet envoyé');

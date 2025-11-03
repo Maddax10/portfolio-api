@@ -24,8 +24,7 @@ import db from '../db/database.js';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { JWT_SECRET, BCRYPT_SALT_ROUNDS } from '../config/config.js';
-import requireAuth from '../middleware/auth.js';
-import { isAdmin } from '../middleware/rbac.js';
+import { requireAuth } from '../middleware/auth.js';
 const router = Router();
 
 const badCredentials = '❌ Identifiants invalides';
