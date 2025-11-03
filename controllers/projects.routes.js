@@ -92,9 +92,9 @@ router.post('/create', requireAuth, (req, res) => {
 	const { title, description, github, image_path, skills } = req.body;
 	try {
 		if (!title || !description || !github || !image_path || !skills) throw new Error('champ vide ou mauvais objet envoyé');
-		if (!isValidString(title) || !isValidString(description) || !isValidString(github) || !isValidString(image_path) || !isValidString(skills)) throw new Error('champ vide ou mauvais objet envoyé');
+		if (!isValidString(title) || !isValidString(description) || !isValidString(github) || !isValidString(image_path) || !isValidIdSkillsArray(skills)) throw new Error('champ vide ou mauvais objet envoyé');
 
-		const rows = db.prepare(`INSERT INTO projects (title_projects, description_projects, github_projects, image_path_projects, skills_projects) VALUES (?,?,?,?,?) RETURNING *;`).get(title, description, github, image_path, skills);
+		const rows = db.prepare(`INSERT INTO projects (title_projects, description_projects, github_projects, image_path_projects, skills_projects) VALUES (?,?,?,?,?) RETURNING *;`).get(title, description, github, image_path, JSON.stringify(skills));
 		const data = getData(rows);
 
 		return res.status(200).json(data);
