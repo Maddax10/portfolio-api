@@ -139,7 +139,7 @@ router.post('/login', (req, res) => {
 /**
  * @swagger
  * /users/me:
- *   post:
+ *   get:
  *     summary: Informations de l'utilisateur
  *     tags: [Users]
  *     responses:
