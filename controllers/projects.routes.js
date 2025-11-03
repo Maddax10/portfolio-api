@@ -91,7 +91,7 @@ const getData = (project) => {
  * @swagger
  * /projects/all:
  *   get:
- *     summary: Get all projects
+ *     summary: Récupérer tous les projets
  *     tags: [Projects]
  *     security : []
  *     responses:
@@ -127,15 +127,15 @@ router.get('/all', (req, res) => {
     return res.status(500).json({ error: err.message });
   }
 });
+
 /**==========================================================
  * POST
    ==========================================================*/
-
 /**
  * @swagger
  * /projects/create:
  *   post:
- *     summary: create a project
+ *     summary: Créer un project
  *     tags: [Projects]
  *     requestBody:
  *       required: true
@@ -146,24 +146,24 @@ router.get('/all', (req, res) => {
  *             properties:
  *               title:
  *                 type: string
- *                 description: The project's title.
+ *                 description: Le titre du projet.
  *                 example: mon projet
  *               description:
  *                 type: string
- *                 description: The project's description.
+ *                 description: La description du projet.
  *                 example: description du projet
  *               github:
  *                 type: string
- *                 description: The project's github repo.
+ *                 description: Le répo github du projet.
  *                 example: https://github.com/user/repo
  *               image_path:
  *                 type: string
- *                 description: The project's image path.
- *                 example: /images/logo.jpg
+ *                 description: Le chemin relatif de l'image du projet.
+ *                 example: /images/projet.jpg
  *               skills:
  *                 type: [object,object,...]
- *                 description: The project's skills.
- *                 example: [{"id":1, "name": "HTML 5", "description" : "blabla", "image_path" : "/image/logo.jpg"}]
+ *                 description: Les skills du projet.
+ *                 example: [{"id":1}]
  *     responses:
  *       '200':
  *         description: creation d'un projet
@@ -198,7 +198,7 @@ router.post('/create', requireAuth, (req, res) => {
  * @swagger
  * /projects/update:
  *   put:
- *     summary: create a project
+ *     summary: Mettre à jour un projet
  *     tags: [Projects]
  *     requestBody:
  *       required: true
@@ -209,27 +209,27 @@ router.post('/create', requireAuth, (req, res) => {
  *             properties:
  *               id:
  *                 type: number
- *                 description: The project's index.
+ *                 description: L'index du projet.
  *                 example: 1
  *               title:
  *                 type: string
- *                 description: The project's title.
+ *                 description: Le titre du projet.
  *                 example: mon projet
  *               description:
  *                 type: string
- *                 description: The project's description.
+ *                 description: La description du projet.
  *                 example: description du projet
  *               github:
  *                 type: string
- *                 description: The project's github repo.
+ *                 description: Le répo github du projet.
  *                 example: https://github.com/user/repo
  *               image_path:
  *                 type: string
- *                 description: The project's image path.
- *                 example: /images/logo.jpg
+ *                 description: Le chemin relatif de l'image du projet.
+ *                 example: /images/projet.jpg
  *               skills:
  *                 type: [object,object,...]
- *                 description: The project's skills.
+ *                 description: Les skills du projet.
  *                 example: [{"id":1}]
  *     responses:
  *       '200':
@@ -268,7 +268,7 @@ router.put('/update', requireAuth, (req, res) => {
  * @swagger
  * /projects/delete:
  *   delete:
- *     summary: create a project
+ *     summary: Supprimer un projet
  *     tags: [Projects]
  *     requestBody:
  *       required: true
@@ -279,7 +279,7 @@ router.put('/update', requireAuth, (req, res) => {
  *             properties:
  *               id:
  *                 type: number
- *                 description: The project's index.
+ *                 description: L'index du projet.
  *                 example: 3
  *     responses:
  *       '200':

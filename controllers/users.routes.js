@@ -1,3 +1,24 @@
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     User:
+ *       type: object
+ *       properties:
+ *         id: { type: integer, example: 3 }
+ *         mail: { type: string, example: "admin@admin.admin" }
+ *         createdAt: { type: string, example: "2025-01-01 18:00:00" }
+ *         role: { type: string, example: "admin" }
+ *         token: { type: string, example: "AbCdEfGhIjKlMnOpQrStUvWxZI6IkpXVCJ9.eyJzdWIiOjEsIm1haWwiOiJtYXhpbWlsaWVuMDE5OTNAZ21haWwuU96tIiwiaWF0IjoxNzYyQtRfODg1LCJleHAiOjE3NjIxNDgwODV9.ckaruqP602dwgqfQeAEv86ZgspPmLktHNqROn9SuZfI" }
+ *     UserMe:
+ *       type: object
+ *       properties:
+ *         id: { type: integer, example: 3 }
+ *         mail: { type: string, example: "admin@admin.admin" }
+ *         createdAt: { type: string, example: "2025-01-01 18:00:00" }
+ *         role: { type: string, example: "admin" }
+ */
+
 import { Router } from 'express';
 import db from '../db/database.js';
 import bcrypt from 'bcryptjs';
@@ -52,7 +73,7 @@ const CheckIsAdmin = (userDB) => {
  * /users/login:
  *   post:
  *     summary: login
- *     tags: [Users]
+ *     tags: [Auth]
  *     security : []
  *     requestBody:
  *       required: true
@@ -70,16 +91,14 @@ const CheckIsAdmin = (userDB) => {
  *                 description: The user's pasword.
  *                 example: password
  *     responses:
- *       200:
- *        properties:
- *               mail:
- *                 type: string
- *                 description: The user's mail.
- *                 example: guest@guest.com
- *               password:
- *                 type: string
- *                 description: The user's pasword.
- *                 example: password
+ *       '200':
+ *         description: informations de l'utilisateur
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/User'
  */
 router.post('/login', (req, res) => {
   const { mail, password } = req.body || {};
@@ -117,6 +136,22 @@ router.post('/login', (req, res) => {
     return res.status(500).json({ error: e.message });
   }
 });
+/**
+ * @swagger
+ * /users/me:
+ *   post:
+ *     summary: Récupérer les informations de l'utilisateur
+ *     tags: [Users]
+ *     responses:
+ *       '200':
+ *         description: informations de l'utilisateur
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/UserMe'
+ */
 
 router.get('/me', requireAuth, (req, res) => {
   const currentUserId = req.auth?.sub;

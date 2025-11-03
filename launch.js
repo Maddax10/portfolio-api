@@ -36,8 +36,9 @@ const swaggerOptions = {
     },
     security: [{ bearerAuth: [] }],
     tags: [
+      { name: 'Auth', description: 'Authentification' },
+      { name: 'Users', description: 'Utilisateurs' },
       { name: 'Projects', description: 'Endpoints des projets' },
-      { name: 'Users', description: 'Authentification et utilisateurs' },
       { name: 'Skills', description: 'Gestion des compétences' },
     ],
   },
