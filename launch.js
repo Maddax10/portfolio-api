@@ -86,5 +86,5 @@ app.use('/api/projects/', projectsRoutes);
 // Root: show API documentation summary instead of login form (frontend not served here)
 
 app.listen(PORT, () => {
-  console.log(`Server running at ${URL_API}`);
+  console.log(`Server running at ${URL_API}:${PORT}`);
 });
