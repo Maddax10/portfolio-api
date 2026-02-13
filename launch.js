@@ -7,7 +7,7 @@ import cors from 'cors';
 import compression from 'compression';
 
 // config
-import { PORT, URL_FRONT, URL_API } from './config/config.js';
+import { PORT, URL_FRONT, URL_API, URL_ENDPOINT, URL_PORT } from './config/config.js';
 
 //Routes
 import docsRoutes from './controllers/docs.routes.js';
@@ -21,28 +21,28 @@ import swaggerJsdoc from 'swagger-jsdoc';
 
 // Config Swagger (OpenAPI 3)
 const swaggerOptions = {
-  definition: {
-    openapi: '3.0.3',
-    info: {
-      title: 'Portfolio API',
-      version: '1.0.0',
-      description: 'Documentation de l’API Portfolio',
+    definition: {
+        openapi: '3.0.3',
+        info: {
+            title: 'Portfolio API',
+            version: '1.0.0',
+            description: 'Documentation de l’API Portfolio',
+        },
+        servers: [{ url: `${URL_API}:${URL_PORT}/${URL_ENDPOINT}` }],
+        components: {
+            securitySchemes: {
+                bearerAuth: { type: 'http', scheme: 'bearer', bearerFormat: 'JWT' },
+            },
+        },
+        security: [{ bearerAuth: [] }],
+        tags: [
+            { name: 'Auth', description: 'Authentification' },
+            { name: 'Users', description: 'Utilisateurs' },
+            { name: 'Projects', description: 'Endpoints des projets' },
+            { name: 'Skills', description: 'Gestion des compétences' },
+        ],
     },
-    servers: [{ url: URL_API.replace(/\/$/, '') }],
-    components: {
-      securitySchemes: {
-        bearerAuth: { type: 'http', scheme: 'bearer', bearerFormat: 'JWT' },
-      },
-    },
-    security: [{ bearerAuth: [] }],
-    tags: [
-      { name: 'Auth', description: 'Authentification' },
-      { name: 'Users', description: 'Utilisateurs' },
-      { name: 'Projects', description: 'Endpoints des projets' },
-      { name: 'Skills', description: 'Gestion des compétences' },
-    ],
-  },
-  apis: ['./controllers/**/*.js'], // JSDoc @swagger dans tes routes
+    apis: ['./controllers/**/*.js'], // JSDoc @swagger dans tes routes
 };
 
 const swaggerSpec = swaggerJsdoc(swaggerOptions);
@@ -57,12 +57,12 @@ const BUILD_INFO = { started_at: START_TIME };
 
 app.use(express.json());
 app.use(
-  cors({
-    origin: '*', //Ou mettre URL_FRONT(de .env) pour être sur que ça ne vient que du front
-    credentials: true,
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
-  })
+    cors({
+        origin: '*', //Ou mettre URL_FRONT(de .env) pour être sur que ça ne vient que du front
+        credentials: true,
+        methods: ['GET', 'POST', 'PUT', 'DELETE'],
+        allowedHeaders: ['Content-Type', 'Authorization'],
+    }),
 );
 
 /**
@@ -86,5 +86,5 @@ app.use('/api/projects/', projectsRoutes);
 // Root: show API documentation summary instead of login form (frontend not served here)
 
 app.listen(PORT, () => {
-  console.log(`Server running at ${URL_API}:${PORT}`);
+    console.log(`Server running at ${URL_API}:${URL_PORT}/${URL_ENDPOINT}`);
 });
