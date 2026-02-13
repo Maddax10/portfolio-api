@@ -5,7 +5,8 @@
 import express from 'express';
 import cors from 'cors';
 import compression from 'compression';
-
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
 // config
 import { PORT, URL_FRONT, URL_API, URL_ENDPOINT, URL_PORT } from './config/config.js';
 
@@ -83,6 +84,11 @@ app.use('/api/users/', usersRoutes);
 app.use('/api/skills/', skillsRoutes);
 app.use('/api/projects/', projectsRoutes);
 
+//Images
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+app.use(express.static(__dirname + '\\public'));
+console.log(__dirname + '\\public');
 // Root: show API documentation summary instead of login form (frontend not served here)
 
 app.listen(PORT, () => {
