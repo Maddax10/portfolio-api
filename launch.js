@@ -8,13 +8,14 @@ import compression from 'compression';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 // config
-import { PORT, URL_FRONT, URL_API, URL_ENDPOINT, URL_PORT } from './config/config.js';
+import { PORT, URL_FRONT, URL_API, URL_ENDPOINT, URL_PORT } from './config.js';
 
 //Routes
 import docsRoutes from './controllers/docs.routes.js';
 import usersRoutes from './controllers/users.routes.js';
 import skillsRoutes from './controllers/skills.routes.js';
 import projectsRoutes from './controllers/projects.routes.js';
+import images from './controllers/images.routes.js';
 
 // Swagger
 import swaggerUi from 'swagger-ui-express';
@@ -83,6 +84,7 @@ app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec, { explorer: t
 app.use('/api/users/', usersRoutes);
 app.use('/api/skills/', skillsRoutes);
 app.use('/api/projects/', projectsRoutes);
+app.use('/api/images/', images);
 
 //Images
 const __filename = fileURLToPath(import.meta.url);

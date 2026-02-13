@@ -33,6 +33,13 @@ export const URL_API = process.env.VITE_API_URL || 'undefined';
 export const URL_ENDPOINT = process.env.VITE_ENDPOINT || 'undefined';
 export const URL_PORT = process.env.VITE_PORT || 'undefined';
 
+//images
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+export const BASE_PATH = __dirname || 'undefined';
+
 // En environnement non-développement, échoue immédiatement si le JWT_SECRET est resté sur la valeur par défaut (insecure)
 // Vérifie que le secret faible n'est pas utilisé hors développement
 if (NODE_ENV !== 'development' && JWT_SECRET === base_jwt_secret) {
